@@ -87,6 +87,9 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 
 10. Open your browser and visit `http://{{APP_URL}}` to access the application.
 
+![Landing Page](image.png)
+*Landing Page*
+
 ## Usage
 
 - Register a new user account.
