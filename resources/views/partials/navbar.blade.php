@@ -18,6 +18,8 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#">Logged in as {{ auth()->user()->name }}</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('profile') }}">Account Settings</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logoutBtn" style="cursor: pointer;">Logout</a>
                         </div>
                     </li>

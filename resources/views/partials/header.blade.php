@@ -59,4 +59,14 @@
         background-color: rgb(239 68 68);
         color: white;
     }
+
+    /* Add your styles for the fade-in animation */
+    .lazy-load {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .lazy-load.loaded {
+        opacity: 1;
+    }
 </style>

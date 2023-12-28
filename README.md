@@ -4,8 +4,8 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 
 ## Features
 
-- User registration and login using Sentry authentication.
-- CRUD operations for managing resources.
+-   User registration and login using Sentry authentication.
+-   CRUD operations for managing resources.
 
 ## Installation
 
@@ -65,7 +65,15 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 
     By default, Laravel uses the `sync` queue driver, which executes jobs immediately. If you want to use a different queue driver, such as `database` or `redis`, update the `QUEUE_CONNECTION` variable in the `.env` file.
 
-8. Run the queue jobs:
+8. Set up the storage link:
+
+    Laravel requires a symbolic link to the `public/storage` directory to access uploaded files. Run the following command to create the symbolic link:
+
+    ```bash
+    php artisan storage:link
+    ```
+
+9. Run the queue jobs:
 
     To process queued jobs, run the following command:
 
@@ -74,29 +82,34 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
     ```
 
     ```bash
+    or
+    ```
+
+    ```bash
     php artisan queue:listen
     ```
 
     This command will start a worker process that listens for new jobs and processes them in the background. Make sure to keep this command running in a separate terminal window or as a background process.
 
-9. Start the development server:
+10. Start the development server:
 
     ```bash
     php artisan serve
     ```
 
-10. Open your browser and visit `http://{{APP_URL}}` to access the application.
+11. Open your browser and visit `http://{{APP_URL}}` to access the application.
 
 ![Landing Page](image.png)
-*Landing Page*
+_Landing Page_
 
 ## Usage
 
-- Register a new user account.
-- Log in with your credentials.
-- Email Verification
-- Forgot Password
-- Perform CRUD operations on the resources.
+-   Register a new user account.
+-   Log in with your credentials.
+-   Account Profile
+-   Email Verification
+-   Forgot Password
+-   Perform CRUD operations on the resources.
 
 ## Contributing
 

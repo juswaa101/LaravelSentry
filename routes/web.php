@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\VerifyAccountController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,16 @@ Route::group(['middleware' => 'guest'], function () {
 
 // Auth routes
 Route::group(['middleware' => 'auth'], function () {
+
+    // Profile routes
+    Route::get('/profile-picture', [ProfileController::class, 'getProfilePicture'])
+        ->name('profile.picture');
+
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('profile');
+
+    Route::post('/save-profile', [ProfileController::class, 'saveProfile'])
+        ->name('save.profile');
 
     // Product routes
     Route::get('/api/products', [ProductController::class, 'getProducts'])
