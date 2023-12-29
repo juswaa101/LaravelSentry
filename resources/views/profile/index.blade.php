@@ -72,6 +72,7 @@
                     </div>
                     <!-- Add more security settings as needed -->
                     <button type="button" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                    <a href="{{ route('landing.page') }}" class="btn btn-danger">Cancel</a>
                 </div>
             </div>
         </form>
