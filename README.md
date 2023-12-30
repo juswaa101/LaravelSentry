@@ -86,9 +86,7 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
     php artisan queue:work
     ```
 
-    ```bash
     or
-    ```
 
     ```bash
     php artisan queue:listen
