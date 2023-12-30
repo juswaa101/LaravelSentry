@@ -5,6 +5,11 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 ## Features
 
 -   User registration and login using Sentry authentication.
+-   Multiple ways to authenticate:
+
+    -   Email and password
+    -   Two Factor Verification Code
+
 -   CRUD operations for managing resources.
 
 ## Installation
