@@ -5,6 +5,8 @@ $(document).ready(function () {
         qrbox: 250,
     });
 
+    let toggle = false;
+
     // Set CSRF Token
     $.ajaxSetup({
         headers: {
@@ -90,14 +92,103 @@ $(document).ready(function () {
     $("#showScanner").click(function (e) {
         e.preventDefault();
 
-        // Start QR Scanner
-        html5QrcodeScanner.render(onScanSuccess);
+        // Toggle the value
+        toggle = !toggle;
+
+        if (toggle) {
+            // Change button text
+            $("#showScanner").html("Hide Scan QR");
+
+            // Change button color
+            $("#showScanner").removeClass("btn-success");
+            $("#showScanner").addClass("btn-danger");
+
+            // Show QR Scanner
+            html5QrcodeScanner.render(onScanSuccess);
+        } else {
+            // Change button text
+            $("#showScanner").html("Scan QR");
+
+            // Change button color
+            $("#showScanner").removeClass("btn-danger");
+            $("#showScanner").addClass("btn-success");
+
+            // Hide QR Scanner
+            html5QrcodeScanner.clear();
+        }
+    });
+
+    // Send Key to Email
+    $("#sendKey").click(function (e) {
+        e.preventDefault();
+
+        // Send ajax request
+        $.ajax({
+            type: "post",
+            url: "/two-factor-authentication/send",
+            dataType: "json",
+            beforeSend: function () {
+                // Show loading button
+                $("#sendKey").attr("disabled", true);
+                $("#sendKey").html(
+                    '<i class="fa fa-spinner fa-spin"></i> Sending...'
+                );
+            },
+            complete: function () {
+                // Hide loading button
+                $("#sendKey").attr("disabled", false);
+                $("#sendKey").html("Send Code");
+            },
+            success: function (response) {
+                // Show success message
+                Swal.fire({
+                    icon: "success",
+                    title: "Success!",
+                    text: response.message,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timerProgressBar: true,
+                    timer: 1000,
+                });
+            },
+            error: function (error) {
+                // Handle server errors
+                if (error.status === 500) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong! Please try again",
+                    });
+                }
+
+                // Handle too many requests
+                if (error.status === 429) {
+                    // Clear error messages
+                    $("#showMessage").html("");
+
+                    // Get remaining time from header
+                    let remainingTime = error.getResponseHeader("Retry-After");
+
+                    // Show too many login attempts alert
+                    $("#tooManyAttemptsMessage").html(
+                        `<div class="alert alert-danger alert-dismissible fade show">
+                            <p><strong>Whoops!</strong> Too many sent code attempts. Please try again later in <span id="timerThrottle">1</span></p>
+                            <a class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                        </div>`
+                    );
+
+                    // Show timer
+                    showThrottleTime(remainingTime);
+                }
+            },
+        });
     });
 
     // Function to handle QR Code scan success
     function onScanSuccess(decodedText, decodedResult) {
         // Set QR Code value
-        $('#code').val(decodedText);
+        $("#code").val(decodedText);
 
         // Show success message
         Swal.fire({
@@ -129,5 +220,33 @@ $(document).ready(function () {
         $.each(errors, function (key, value) {
             $(`#errorList`).append("<li>" + value + "</li>");
         });
+    }
+
+    // Function to show alert with timer
+    function showThrottleTime(remainingTime) {
+        let timeLeft = remainingTime;
+        let timerThrottle = $("#timerThrottle");
+        let msgElement = $("#tooManyAttemptsMessage");
+
+        // Set initial message
+        updateTimerDisplay(timerThrottle, timeLeft);
+
+        // Start countdown
+        let timerId = setInterval(function () {
+            if (timeLeft === 0) {
+                clearInterval(timerId);
+                msgElement.html("");
+            } else {
+                updateTimerDisplay(timerThrottle, timeLeft);
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    // Function to update timer display
+    function updateTimerDisplay(timerThrottleElement, timeLeft) {
+        timerThrottleElement.html(
+            timeLeft + " second" + (timeLeft !== 1 ? "s" : "")
+        );
     }
 });

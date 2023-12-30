@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('token')->unique();
             $table->boolean('is_verified')->nullable();
             $table->json('two_factor_codes')->nullable();
+            $table->boolean('is_two_factor_verified')->default(false);
             $table->boolean('is_two_factor_enabled')->default(false);
             $table->string('password');
             $table->timestamps();

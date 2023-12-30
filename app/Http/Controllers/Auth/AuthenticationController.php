@@ -47,14 +47,6 @@ class AuthenticationController extends Controller
     {
         // Check if user credentials is valid
         if (auth()->attempt($request->validated())) {
-
-            // Check if user account is not verified
-            if (auth()->user()->is_verified == null || auth()->user()->is_verified == false) {
-                auth()->logout();
-
-                return $this->error('User account is not verified', 401);
-            }
-
             // Reset rate limit after success login
             RateLimiter::clear($request->email . '|' . $request->ip());
 
@@ -102,6 +94,12 @@ class AuthenticationController extends Controller
      */
     public function logout()
     {
+        // Reset is_two_factor_verified status
+        $user = User::findOrFail(auth()->user()->id);
+        $user->updateOrFail([
+            'is_two_factor_verified' => false,
+        ]);
+
         // Logout user
         auth()->logout();
 

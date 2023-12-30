@@ -20,6 +20,7 @@
                     <div class="card-body">
                         <h1 class="mb-3">Request Password Reset</h1>
                         <div id="showMessage"></div>
+                        <div id="tooManyAttemptsMessage"></div>
                         <form id="sendPasswordResetForm">
                             <div class="form-group">
                                 <label for="email">Email</label>

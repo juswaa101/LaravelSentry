@@ -21,7 +21,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('landing.page');
+})
+    ->name('landing.page')
+    ->middleware('2fa', 'account.verified');
+
+// Verify account routes
+Route::get('/verify/{token}', [VerifyAccountController::class, 'verifyAccountForm'])
+    ->name('verify.form')
+    ->middleware('signed');
+
+Route::post('/verify/{token}/send', [VerifyAccountController::class, 'verifyAccount'])
+    ->name('verify');
 
 Route::get('/logout', [AuthenticationController::class, 'logout'])
     ->name('logout');
@@ -42,29 +52,14 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/register', [AuthenticationController::class, 'registerProcess'])
         ->name('register.process');
 
-    // Two Factor Authentication routes
-    Route::get('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'twoFactorAuthForm'])
-        ->name('two-factor-authentication.form');
-
-    Route::post('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'verifyTwoFactorAuthCode'])
-        ->name('two-factor-authentication.verify');
-
-
-    // Verify account routes
-    Route::get('/verify/{token}', [VerifyAccountController::class, 'verifyAccountForm'])
-        ->name('verify.form')
-        ->middleware('signed');
-
-    Route::post('/verify/{token}/send', [VerifyAccountController::class, 'verifyAccount'])
-        ->name('verify');
-
 
     // Forgot password routes
     Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPasswordForm'])
         ->name('password.request');
 
     Route::post('/forgot-password/submit', [ForgotPasswordController::class, 'forgotPassword'])
-        ->name('password.email');
+        ->name('password.email')
+        ->middleware('throttle:forgot-password-attempt');
 
     Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPasswordForm'])
         ->name('password.reset.form')
@@ -76,27 +71,50 @@ Route::group(['middleware' => 'guest'], function () {
 
 // Auth routes
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/resent-verification', [VerifyAccountController::class, 'resendVerificationForm'])
+        ->name('verify.account.form');
 
-    // Profile routes
-    Route::get('/profile-picture', [ProfileController::class, 'getProfilePicture'])
-        ->name('profile.picture');
+    Route::post('/resent-verification', [VerifyAccountController::class, 'resendVerification'])
+        ->name('resend.verification')
+        ->middleware('throttle:verify-account-attempt');
 
-    Route::get('/profile', [ProfileController::class, 'index'])
-        ->name('profile');
+    // Protected routes by Account Verification
+    Route::group(['middleware' => 'account.verified'], function () {
+        // Two Factor Authentication routes
+        Route::get('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'twoFactorAuthForm'])
+            ->name('two-factor-authentication.form');
 
-    Route::post('/save-profile', [ProfileController::class, 'saveProfile'])
-        ->name('save.profile');
+        Route::post('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'verifyTwoFactorAuthCode'])
+            ->name('two-factor-authentication.verify');
 
-    // Two factor authentication routes
-    Route::get('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'getTwoFactorAuthStatus'])
-        ->name('profile.two-factor-auth-status');
+        Route::post('/two-factor-authentication/send', [TwoFactorAuthenticationController::class, 'sendTwoFactorAuthCode'])
+            ->name('two-factor-authentication.send')
+            ->middleware('throttle:send-two-factor-auth-attempt');
+    });
 
-    Route::post('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'twoFactorAuth'])
-        ->name('profile.two-factor-auth');
+    // Protected routes by Two Factor Authentication and Account Verification
+    Route::group(['middleware' => ['2fa', 'account.verified']], function () {
+        // Profile routes
+        Route::get('/profile-picture', [ProfileController::class, 'getProfilePicture'])
+            ->name('profile.picture');
 
-    // Product routes
-    Route::get('/api/products', [ProductController::class, 'getProducts'])
-        ->name('api.products');
+        Route::get('/profile', [ProfileController::class, 'index'])
+            ->name('profile');
 
-    Route::resource('/products', ProductController::class);
+        Route::post('/save-profile', [ProfileController::class, 'saveProfile'])
+            ->name('save.profile');
+
+        // Two factor authentication routes
+        Route::get('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'getTwoFactorAuthStatus'])
+            ->name('profile.two-factor-auth-status');
+
+        Route::post('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'twoFactorAuth'])
+            ->name('profile.two-factor-auth');
+
+        // Product routes
+        Route::get('/api/products', [ProductController::class, 'getProducts'])
+            ->name('api.products');
+
+        Route::resource('/products', ProductController::class);
+    });
 });

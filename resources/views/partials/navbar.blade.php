@@ -8,17 +8,21 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 @auth
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('products.index') }}">Products</a>
-                    </li>
+                    @if (auth()->user()->is_verified && (auth()->user()->is_two_factor_enabled && auth()->user()->is_two_factor_verified))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                        </li>
+                    @endif
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">Welcome, {{ auth()->user()->name }}</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="#">Logged in as {{ auth()->user()->name }}</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('profile') }}">Account Settings</a>
+                            @if (auth()->user()->is_verified)
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('profile') }}">Account Settings</a>
+                            @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" id="logoutBtn" style="cursor: pointer;">Logout</a>
                         </div>

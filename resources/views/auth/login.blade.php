@@ -13,42 +13,40 @@
 <body>
     @include('partials.navbar')
 
-    <div class="container p-5">
+    <div class="container mt-4" style="margin-bottom:5rem !important;">
         <div class="row">
-            <div class="col-md-6 mx-auto" style="margin-bottom: 2rem;">
+            <div class="col-md-6 mx-auto">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="mb-3">Login Here</h1>
+                        <h1 class="text-center mb-4">Login</h1>
                         <div id="showMessage"></div>
                         <div id="tooManyAttemptsMessage"></div>
                         <form id="loginForm">
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input id="email" type="email" class="form-control" name="email"
-                                    placeholder="Valid Email" value="{{ old('email') }}">
+                                    placeholder="Enter your email" value="{{ old('email') }}" required>
                             </div>
 
                             <div class="form-group mt-3">
                                 <label for="password">Password</label>
                                 <input id="password" class="form-control" type="password" name="password"
-                                    placeholder="Valid Password">
+                                    placeholder="Enter your password" required>
                             </div>
 
                             <div class="form-group mt-3">
-                                <button class="btn btn-primary" type="button" id="loginBtn">Login</button>
+                                <button class="btn btn-primary btn-block" type="button" id="loginBtn">Login</button>
                             </div>
                         </form>
 
-                        <!-- Two-Factor Authentication Option -->
-                        <div class="form-group mt-3">
-                            <p>Sign in with Two-Factor Authentication:</p>
-                            <a href="{{ route('two-factor-authentication.form') }}" class="btn btn-danger">Sign In With Two Factor</a>
-                        </div>
+                        <hr>
 
-                        <p class="mt-3">Don't have an account? <a href="{{ route('register') }}"
-                                style="display:inline; margin-left: 5px;">Register here</a></p>
-                        <p class="mt-3">Forgot your password? <a href="{{ route('password.request') }}"
-                                style="display:inline; margin-left: 5px;">Reset here</a></p>
+                        <div class="text-center">
+                            <p class="mb-2">Don't have an account? <a href="{{ route('register') }}">Register here</a>
+                            </p>
+                            <p class="mb-4">Forgot your password? <a href="{{ route('password.request') }}">Reset
+                                    here</a></p>
+                        </div>
                     </div>
                 </div>
             </div>

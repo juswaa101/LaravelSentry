@@ -94,9 +94,25 @@
 
                         <!-- QR Code and Key Combinations -->
                         <div id="twoFactorAuthSection" class="d-none">
-                            <h5>Scan QR Code or Enter Key Combinations</h5>
+                            <h5 class="text-center">Scan QR Code or Enter Key Combinations</h5>
 
-                            <div class="row mb-3">
+                            <!-- Note -->
+                            <div class="row mt-3">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="alert alert-warning alert-dismissable fade show" role="alert">
+                                        <button type="button" class="btn-close float-end" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                        <span class="fw-bold">Note:</span>
+                                        <p class="mt-3">
+                                            If you lose your device or uninstall the app,
+                                            you can still login to your account using the recovery code.
+                                            Please save the recovery code in a safe place.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 mt-3">
                                 <div class="col-md-6 text-center">
                                     <div id="qrcode"></div>
                                     <br />
@@ -111,7 +127,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </div>
 
