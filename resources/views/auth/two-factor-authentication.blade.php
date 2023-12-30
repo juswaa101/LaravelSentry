@@ -14,7 +14,7 @@
 <body>
     @include('partials.navbar')
 
-    <div class="container mt-5">
+    <div class="container mt-5" style="margin-bottom: 5rem;">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
@@ -27,11 +27,15 @@
                                 <label for="code">Authentication Code</label>
                                 <input id="code" type="text" class="form-control" name="code"
                                     placeholder="XXXX-XXXX-XXXX-XXXX-XXXX">
+                                <div id="reader" class="mt-3 w-100"></div>
                             </div>
 
                             <div class="form-group mt-3">
                                 <button type="button" class="btn btn-primary" id="verifyBtn">
                                     Verify
+                                </button>
+                                <button type="button" class="btn btn-success" id="showScanner">
+                                    Scan QR Code
                                 </button>
                             </div>
                         </form>

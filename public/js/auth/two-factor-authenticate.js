@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    // Initialize QR Scanner
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+        fps: 10,
+        qrbox: 250,
+    });
+
     // Set CSRF Token
     $.ajaxSetup({
         headers: {
@@ -79,6 +85,35 @@ $(document).ready(function () {
             },
         });
     });
+
+    // Show QR Scanner
+    $("#showScanner").click(function (e) {
+        e.preventDefault();
+
+        // Start QR Scanner
+        html5QrcodeScanner.render(onScanSuccess);
+    });
+
+    // Function to handle QR Code scan success
+    function onScanSuccess(decodedText, decodedResult) {
+        // Set QR Code value
+        $('#code').val(decodedText);
+
+        // Show success message
+        Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "QR Code scanned successfully",
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 1000,
+        });
+
+        // Stop QR Scanner
+        html5QrcodeScanner.clear();
+    }
 
     // Function to handle validation errors
     function handleValidationErrors(errors) {

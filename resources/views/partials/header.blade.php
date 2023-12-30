@@ -47,6 +47,11 @@
     integrity="sha512-NFUcDlm4V+a2sjPX7gREIXgCSFja9cHtKPOL1zj6QhnE0vcY695MODehqkaGYTLyL2wxe/wtr4Z49SvqXq12UQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<!-- HTML5 QR Code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"
+    integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
