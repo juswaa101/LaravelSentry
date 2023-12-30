@@ -176,6 +176,25 @@ function updateTwoFactorAuthStatus(status, two_factor_codes) {
 }
 
 $(document).ready(function () {
+    // Show loading spinner in card body
+    $("#twoFactorContentLoader").html(
+        `<div class="d-flex justify-content-center p-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div> &nbsp; Loading....
+            </div>`
+    );
+
+    // Hide Spinner after 1.5 seconds
+    setTimeout(() => {
+        // Hide loading spinner in card body
+        $("#twoFactorContentLoader").html("");
+
+        // Show 2FA Content
+        $('#twoFactorContent').fadeIn(750);
+        $("#twoFactorContent").removeClass("d-none");
+    }, 1500);
+
     // Enable/Disable 2FA Event
     $("#enable2fa").click(function () {
         // Clear existing element
