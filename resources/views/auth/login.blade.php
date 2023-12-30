@@ -39,6 +39,12 @@
                             </div>
                         </form>
 
+                        <!-- Two-Factor Authentication Option -->
+                        <div class="form-group mt-3">
+                            <p>Sign in with Two-Factor Authentication:</p>
+                            <a href="{{ route('two-factor-authentication.form') }}" class="btn btn-danger">Sign In With Two Factor</a>
+                        </div>
+
                         <p class="mt-3">Don't have an account? <a href="{{ route('register') }}"
                                 style="display:inline; margin-left: 5px;">Register here</a></p>
                         <p class="mt-3">Forgot your password? <a href="{{ route('password.request') }}"
@@ -48,6 +54,7 @@
             </div>
         </div>
     </div>
+
 
     @include('partials.footer')
 

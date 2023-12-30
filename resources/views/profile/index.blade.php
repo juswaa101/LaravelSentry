@@ -75,12 +75,46 @@
                     <a href="{{ route('landing.page') }}" class="btn btn-danger">Cancel</a>
                 </div>
             </div>
+
+            <!-- Two Factor Authentication Section -->
+            <div class="card mt-3" style="margin-bottom:5rem;">
+                <div class="card-header bg-primary text-white">
+                    Two Factor Authentication
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="enable2fa" name="enable2fa">
+                        <label class="form-check-label" for="enable2fa">
+                            Enable Two Factor Authentication
+                        </label>
+                    </div>
+
+                    <!-- QR Code and Key Combinations -->
+                    <div id="twoFactorAuthSection" class="d-none">
+                        <h5>Scan QR Code or Enter Key Combinations</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 text-center">
+                                <div id="qrcode"></div>
+                                <br />
+                                <label for="qrCode" class="form-label">Scan this QR Code</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="keyCombinations" class="form-label fw-bold">Key Combinations</label>
+                                <div id="keyCombinations"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 
     @include('partials.footer')
 
     <script src="{{ asset('js/profile/profile.js') }}" data-profile="{{ route('save.profile') }}"></script>
+    <script src="{{ asset('js/profile/two-factor-auth.js') }}"></script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\VerifyAccountController;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,13 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/register', [AuthenticationController::class, 'registerProcess'])
         ->name('register.process');
 
+    // Two Factor Authentication routes
+    Route::get('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'twoFactorAuthForm'])
+        ->name('two-factor-authentication.form');
+
+    Route::post('/two-factor-authentication', [TwoFactorAuthenticationController::class, 'verifyTwoFactorAuthCode'])
+        ->name('two-factor-authentication.verify');
+
 
     // Verify account routes
     Route::get('/verify/{token}', [VerifyAccountController::class, 'verifyAccountForm'])
@@ -78,6 +86,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/save-profile', [ProfileController::class, 'saveProfile'])
         ->name('save.profile');
+
+    // Two factor authentication routes
+    Route::get('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'getTwoFactorAuthStatus'])
+        ->name('profile.two-factor-auth-status');
+
+    Route::post('/profile/two-factor-auth-status', [TwoFactorAuthenticationController::class, 'twoFactorAuth'])
+        ->name('profile.two-factor-auth');
 
     // Product routes
     Route::get('/api/products', [ProductController::class, 'getProducts'])

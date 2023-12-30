@@ -25,6 +25,8 @@ class User extends Authenticatable
         'is_verified',
         'token',
         'avatar',
+        'two_factor_codes',
+        'is_two_factor_enabled',
     ];
 
     /**

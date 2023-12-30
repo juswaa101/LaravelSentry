@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Profile\SaveProfileRequest;
 use App\Models\User;
 use App\Traits\ResponseHelper;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
