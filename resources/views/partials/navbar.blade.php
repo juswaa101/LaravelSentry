@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 @auth
-                    @if (auth()->user()->is_verified && (auth()->user()->is_two_factor_enabled && auth()->user()->is_two_factor_verified))
+                    @if (auth()->user()->is_verified || (auth()->user()->is_two_factor_enabled && auth()->user()->is_two_factor_verified))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('products.index') }}">Products</a>
                         </li>
