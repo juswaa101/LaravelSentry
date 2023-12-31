@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Profile\SaveProfileRequest;
 use App\Models\User;
 use App\Traits\ResponseHelper;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -52,17 +51,7 @@ class ProfileController extends Controller
             if ($request->has('profile') && $user->avatar != $request->profile) {
                 $content = base64_encode(file_get_contents($request->profile));
 
-                // If there is existing avatar
-                if ($user->avatar) {
-                    // Update the avatar in storage
-                    Storage::disk('public')->put($filepath, $content);
-                } else {
-                    // Create new avatar in storage
-                    Storage::disk('public')->put(
-                        $filepath,
-                        $content
-                    );
-                }
+                Storage::disk('public')->put($filepath, $content);
 
                 // Update the avatar in database
                 $user->updateOrFail(['avatar' => $content]);
@@ -71,6 +60,18 @@ class ProfileController extends Controller
             // update password if changed in the request
             if ($request->filled('password') && $user->password != $request->password) {
                 $user->updateOrFail(['password' => $request->password]);
+            }
+
+            // update both password and profile exists in the request
+            if ($request->filled('password') && $request->has('profile')) {
+                $content = base64_encode(file_get_contents($request->profile));
+
+                Storage::disk('public')->put($filepath, $content);
+
+                $user->updateOrFail([
+                    'password' => $request->password,
+                    'avatar' => $content
+                ]);
             }
 
             // Return success response

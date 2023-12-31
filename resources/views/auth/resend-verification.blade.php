@@ -21,7 +21,6 @@
                         <h3 class="card-title">Resend Verification Link</h3>
                     </div>
                     <div class="card-body">
-                        <div id="tooManyAttemptsMessage"></div>
                         <form id="resentVerificationForm">
                             <div class="form-group">
                                 <span class="fw-bold">Hi, {{ auth()->user()->name }}.</span>
@@ -29,7 +28,7 @@
                                     We sent you an email with a verification link. Before proceeding, please check your
                                     email for a verification link.
                                 </p>
-                                <button type="button" class="btn btn-primary" id="resendBtn">Resend Verification
+                                <button type="button" class="btn btn-danger" id="resendBtn">Resend Verification
                                     Link</button>
                             </div>
                         </form>

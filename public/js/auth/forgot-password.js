@@ -80,16 +80,27 @@ $(document).ready(function () {
                     // Get remaining time from header
                     let remainingTime = error.getResponseHeader("Retry-After");
 
-                    // Show too many login attempts alert
-                    $("#tooManyAttemptsMessage").html(
-                        `<div class="alert alert-danger alert-dismissible fade show">
-                            <p><strong>Whoops!</strong> Too many request password attempts. Please try again later in <span id="timerThrottle">1</span></p>
-                            <a class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
-                        </div>`
-                    );
+                    // Disable send code button
+                    $("#sendPasswordResetBtn").attr("disabled", true);
 
-                    // Show timer
-                    showThrottleTime(remainingTime);
+                    // Set 30 seconds timer before it can be clicked again
+                    let timeLeft = remainingTime;
+
+                    // Start countdown
+                    let timer = setInterval(() => {
+                        if (timeLeft === 0) {
+                            $("#sendPasswordResetBtn").attr("disabled", false);
+                            $("#sendPasswordResetBtn").html("Request");
+                            clearInterval(timer);
+                            return;
+                        }
+
+                        $("#sendPasswordResetBtn").attr("disabled", true);
+
+                        // set time in button
+                        $("#sendPasswordResetBtn").html(`Request (${timeLeft})`);
+                        timeLeft--;
+                    }, 1000);
                 }
 
                 // if there are server errors
@@ -118,33 +129,5 @@ $(document).ready(function () {
         $.each(errors, function (key, value) {
             $(`#errorList`).append("<li>" + value + "</li>");
         });
-    }
-
-    // Function to show alert with timer
-    function showThrottleTime(remainingTime) {
-        let timeLeft = remainingTime;
-        let timerThrottle = $("#timerThrottle");
-        let msgElement = $("#tooManyAttemptsMessage");
-
-        // Set initial message
-        updateTimerDisplay(timerThrottle, timeLeft);
-
-        // Start countdown
-        let timerId = setInterval(function () {
-            if (timeLeft === 0) {
-                clearInterval(timerId);
-                msgElement.html("");
-            } else {
-                updateTimerDisplay(timerThrottle, timeLeft);
-                timeLeft--;
-            }
-        }, 1000);
-    }
-
-    // Function to update timer display
-    function updateTimerDisplay(timerThrottleElement, timeLeft) {
-        timerThrottleElement.html(
-            timeLeft + " second" + (timeLeft !== 1 ? "s" : "")
-        );
     }
 });

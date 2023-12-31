@@ -45,16 +45,26 @@ $(document).ready(function () {
                     // Get remaining time from header
                     let remainingTime = error.getResponseHeader("Retry-After");
 
-                    // Show too many login attempts alert
-                    $("#tooManyAttemptsMessage").html(
-                        `<div class="alert alert-danger alert-dismissible fade show">
-                            <p><strong>Whoops!</strong> Too many resend verification attempts. Please try again later in <span id="timerThrottle">1</span></p>
-                            <a class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
-                        </div>`
-                    );
+                    // Set remaining time
+                    let timeLeft = remainingTime;
 
-                    // Show timer
-                    showThrottleTime(remainingTime);
+                    // Start countdown
+                    let timer = setInterval(() => {
+                        if (timeLeft === 0) {
+                            $("#resendBtn").attr("disabled", false);
+                            $("#resendBtn").html("Resend Verification Link");
+                            clearInterval(timer);
+                            return;
+                        }
+
+                        $("#resendBtn").attr("disabled", true);
+
+                        // set time in button
+                        $("#resendBtn").html(
+                            `Resend Verification Link (${timeLeft})`
+                        );
+                        timeLeft--;
+                    }, 1000);
                 }
 
                 // Server error

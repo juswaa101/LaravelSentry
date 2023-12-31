@@ -33,15 +33,15 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('send-two-factor-auth-attempt', function (Request $request) {
-            return Limit::perMinutes(1, 2)->by($request->user()?->email . '|' . $request->ip());
+            return Limit::perMinutes(1, 1)->by($request->user()?->email . '|' . $request->ip());
         });
 
         RateLimiter::for('forgot-password-attempt', function (Request $request) {
-            return Limit::perMinutes(1, 2)->by($request->email . '|' . $request->ip());
+            return Limit::perMinutes(1, 1)->by($request->email . '|' . $request->ip());
         });
 
         RateLimiter::for('verify-account-attempt', function (Request $request) {
-            return Limit::perMinutes(1, 2)->by($request->user()?->email . '|' . $request->ip());
+            return Limit::perMinutes(1, 1)->by($request->user()?->email . '|' . $request->ip());
         });
 
         $this->routes(function () {
