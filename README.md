@@ -6,11 +6,11 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 
 -   User registration and login using Sentry authentication.
 -   Multiple ways to authenticate:
-
     -   Email and password
     -   Two Factor Verification Code
-
 -   CRUD operations for managing resources.
+-   Session management using the database:
+    -   Session data will be stored in the `sessions` table.
 
 ## Installation
 
@@ -78,7 +78,16 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
     php artisan storage:link
     ```
 
-9. Run the queue jobs:
+9. Set up the session to use the database:
+
+    To store session data in the database, run the following command:
+
+    ```bash
+    php artisan session:table
+    php artisan migrate
+    ```
+
+10. Run the queue jobs:
 
     To process queued jobs, run the following command:
 
@@ -94,24 +103,22 @@ This is a Laravel application that implements Sentry authentication and CRUD (Cr
 
     This command will start a worker process that listens for new jobs and processes them in the background. Make sure to keep this command running in a separate terminal window or as a background process.
 
-10. Start the development server:
+11. Start the development server:
 
     ```bash
     php artisan serve
     ```
 
-11. Open your browser and visit `http://{{APP_URL}}` to access the application.
+12. Open your browser and visit `http://{{APP_URL}}` to access the application.
 
 ![Landing Page](image.png)
 _Landing Page_
 
 ## Usage
 
--   Register a new user account.
--   Log in with your credentials.
+-   Login and Registration
 -   Account Profile
--   Email Verification
--   Forgot Password
+-   Browser Session Monitoring
 -   Perform CRUD operations on the resources.
 
 ## Contributing
