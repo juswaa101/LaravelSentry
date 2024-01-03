@@ -75,65 +75,115 @@
                     <a href="{{ route('landing.page') }}" class="btn btn-danger">Cancel</a>
                 </div>
             </div>
+        </form>
 
-            <!-- Two Factor Authentication Section -->
-            <div class="card mt-3" style="margin-bottom:5rem;">
-                <div class="card-header bg-primary text-white">
-                    Two Factor Authentication
+        <!-- Browser Sessions Section -->
+        <div class="card mt-3" style="margin-bottom: 5rem;">
+            <div class="card-header bg-primary text-white">
+                Browser Sessions
+            </div>
+            <div class="card-body">
+                <h5 class="text-center">Active Sessions</h5>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>IP Address</th>
+                                <th>Device</th>
+                                <th>Browser</th>
+                                <th>Last Active</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Add dynamic session data here -->
+                            @foreach ($sessions as $session)
+                                <tr>
+                                    @php
+                                        $agent = new Jenssegers\Agent\Agent();
+                                        $agent->setUserAgent($session->user_agent);
+                                    @endphp
+
+                                    <td>{{ $session->ip_address }}</td>
+                                    <td>{{ $agent->device() }}</td>
+                                    <td>{{ $agent->browser() }}</td>
+                                    <td>{{ \Carbon\Carbon::createFromTimestamp($session->last_activity)->diffForHumans() }}
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                            class="btn btn-danger btn-sm currentLogoutBtn" data-val="{{ $session->id }}">Logout</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card-body">
-                    <div id="twoFactorContentLoader"></div>
-                    <div id="twoFactorContent" class="d-none">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="enable2fa"
-                                name="enable2fa">
-                            <label class="form-check-label" for="enable2fa">
-                                Enable Two Factor Authentication
-                            </label>
-                        </div>
 
-                        <!-- QR Code and Key Combinations -->
-                        <div id="twoFactorAuthSection" class="d-none">
-                            <h5 class="text-center">Scan QR Code or Enter Key Combinations</h5>
+                <form id="otherBrowserForm">
+                    <button type="button" class="btn btn-primary" id="logoutAllBtn">Logout from All Devices</button>
+                </form>
+            </div>
+        </div>
 
-                            <!-- Note -->
-                            <div class="row mt-3">
-                                <div class="col-md-6 mx-auto">
-                                    <div class="alert alert-warning alert-dismissable fade show" role="alert">
-                                        <button type="button" class="btn-close float-end" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                        <span class="fw-bold">Note:</span>
-                                        <p class="mt-3">
-                                            If you lose your device or uninstall the app,
-                                            you can still login to your account using the recovery code.
-                                            Please save the recovery code in a safe place.
-                                        </p>
-                                    </div>
+        <!-- Two Factor Authentication Section -->
+        <div class="card mt-3" style="margin-bottom:5rem;">
+            <div class="card-header bg-primary text-white">
+                Two Factor Authentication
+            </div>
+            <div class="card-body">
+                <div id="twoFactorContentLoader"></div>
+                <div id="twoFactorContent" class="d-none">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="enable2fa" name="enable2fa">
+                        <label class="form-check-label" for="enable2fa">
+                            Enable Two Factor Authentication
+                        </label>
+                    </div>
+
+                    <!-- QR Code and Key Combinations -->
+                    <div id="twoFactorAuthSection" class="d-none">
+                        <h5 class="text-center">Scan QR Code or Enter Key Combinations</h5>
+
+                        <!-- Note -->
+                        <div class="row mt-3">
+                            <div class="col-md-6 mx-auto">
+                                <div class="alert alert-warning alert-dismissable fade show" role="alert">
+                                    <button type="button" class="btn-close float-end" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                    <span class="fw-bold">Note:</span>
+                                    <p class="mt-3">
+                                        If you lose your device or uninstall the app,
+                                        you can still login to your account using the recovery code.
+                                        Please save the recovery code in a safe place.
+                                    </p>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="row mb-3 mt-3">
-                                <div class="col-md-6 text-center">
-                                    <div id="qrcode"></div>
-                                    <br />
-                                    <label for="qrCode" class="form-label">Scan this QR Code</label>
-                                </div>
+                        <div class="row mb-3 mt-3">
+                            <div class="col-md-6 text-center">
+                                <div id="qrcode"></div>
+                                <br />
+                                <label for="qrCode" class="form-label">Scan this QR Code</label>
+                            </div>
 
-                                <div class="col-md-6">
-                                    <label for="keyCombinations" class="form-label fw-bold">Key Combinations</label>
-                                    <div id="keyCombinations"></div>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="keyCombinations" class="form-label fw-bold">Key Combinations</label>
+                                <div id="keyCombinations"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-        </form>
+            </div>
+        </div>
     </div>
 
     @include('partials.footer')
 
     <script src="{{ asset('js/profile/profile.js') }}" data-profile="{{ route('save.profile') }}"></script>
     <script src="{{ asset('js/profile/two-factor-auth.js') }}"></script>
+    <script src="{{ asset('js/profile/browser-session.js') }}"></script>
 </body>
 
 </html>

@@ -191,41 +191,79 @@ $(document).ready(function () {
         $("#twoFactorContentLoader").html("");
 
         // Show 2FA Content
-        $('#twoFactorContent').fadeIn(750);
+        $("#twoFactorContent").fadeIn(750);
         $("#twoFactorContent").removeClass("d-none");
     }, 1500);
 
     // Enable/Disable 2FA Event
     $("#enable2fa").click(function () {
-        // Clear existing element
-        $("#keyCombinations").empty();
+        // Store the initial state of the checkbox
+        const initialCheckboxState = $(this).prop("checked");
 
-        // Check if 2FA is enabled
-        if ($(this).is(":checked")) {
-            // Show 2FA Section
-            $("#twoFactorAuthSection").removeClass("d-none");
+        // Show confirm alert with type confirmation
+        Swal.fire({
+            title: "Are you sure?",
+            text: `To enable two factor authentication, type "confirm" `,
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+            },
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, enable!",
+            cancelButtonText: "No, cancel!",
+            preConfirm: (value) => {
+                if (value == "confirm") {
+                    // Clear existing element
+                    $("#keyCombinations").empty();
 
-            // Array to store key combinations
-            let keys = [];
+                    // Check if 2FA is enabled
+                    if ($(this).is(":checked")) {
+                        // Show 2FA Section
+                        $("#twoFactorAuthSection").removeClass("d-none");
 
-            // Generate 5 Key Combinations
-            for (let i = 0; i < 5; i++) {
-                // Generate a random key combination
-                let key = generateKeyCombination();
+                        // Array to store key combinations
+                        let keys = [];
 
-                // Add key to array
-                keys.push(key);
+                        // Generate 5 Key Combinations
+                        for (let i = 0; i < 5; i++) {
+                            // Generate a random key combination
+                            let key = generateKeyCombination();
+
+                            // Add key to array
+                            keys.push(key);
+                        }
+
+                        // Update status
+                        updateTwoFactorAuthStatus(
+                            true,
+                            JSON.parse(JSON.stringify(keys))
+                        );
+                    } else {
+                        // Hide 2FA Section
+                        $("#twoFactorAuthSection").addClass("d-none");
+
+                        // Update status
+                        updateTwoFactorAuthStatus(false, null);
+                    }
+                } else {
+                    Swal.showValidationMessage(
+                        `Please type "confirm" to enable two factor authentication`
+                    );
+
+                    // Revert the checkbox state to its initial state
+                    $(this).prop("checked", initialCheckboxState);
+                }
+            },
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                if ($(this).is(":checked")) {
+                    $(this).prop("checked", false);
+                } else {
+                    $(this).prop("checked", true);
+                }
             }
-
-            // Update status
-            updateTwoFactorAuthStatus(true, JSON.parse(JSON.stringify(keys)));
-        } else {
-            // Hide 2FA Section
-            $("#twoFactorAuthSection").addClass("d-none");
-
-            // Update status
-            updateTwoFactorAuthStatus(false, null);
-        }
+        });
     });
 
     fetchTwoFactorAuthStatus();

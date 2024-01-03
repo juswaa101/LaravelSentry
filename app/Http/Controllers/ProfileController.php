@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\BrowserSessionController;
 use App\Http\Requests\Profile\SaveProfileRequest;
 use App\Models\User;
 use App\Traits\ResponseHelper;
@@ -19,7 +20,13 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('profile.index');
+        // Create a new session controller instance
+        $session = new BrowserSessionController();
+
+        // Get all the browser sessions
+        $sessions = $session->getBrowserSessions();
+
+        return view('profile.index', compact('sessions'));
     }
 
     /**

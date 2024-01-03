@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\VerifyAccountController;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\Auth\BrowserSessionController;
 use App\Http\Controllers\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -90,6 +91,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/two-factor-authentication/send', [TwoFactorAuthenticationController::class, 'sendTwoFactorAuthCode'])
             ->name('two-factor-authentication.send')
             ->middleware('throttle:send-two-factor-auth-attempt');
+
+        // Logout other browser sessions
+        Route::post('/logout-other-browser-sessions', [BrowserSessionController::class, 'logoutOtherBrowserSessions'])
+            ->name('logout.other.browser.sessions');
+
+        // Logout browser session
+        Route::post('/logout-browser-session', [BrowserSessionController::class, 'logoutBrowserSession'])
+            ->name('logout.browser.session');
     });
 
     // Protected routes by Two Factor Authentication and Account Verification
