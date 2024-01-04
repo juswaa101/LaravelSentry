@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    console.log("browser-session.js loaded");
-
     $("#logoutAllBtn").click(function (e) {
         e.preventDefault();
 
